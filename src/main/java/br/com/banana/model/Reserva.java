@@ -2,22 +2,38 @@ package br.com.banana.model;
 
 import java.util.Calendar;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 /**
  * Classe que representa uma reserva
  * 
  * @author vagner
  *
  */
+@Entity
 public class Reserva {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@OneToOne(cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private Local local;
 
+	@OneToOne(cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private Sala sala;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar dataHoraInicio;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar dataHoraFim;
 
 	private String responsavel;
