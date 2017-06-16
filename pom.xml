@@ -22,12 +22,18 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
 			<artifactId>hibernate-jpa-2.0-api</artifactId>
 			<version>1.0.1.Final</version>
 			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.wildfly</groupId>
+			<artifactId>wildfly-weld</artifactId>
+			<version>10.1.0.Final</version>
 		</dependency>
 	</dependencies>
 
@@ -41,13 +47,13 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-			
+
 			<!-- Wildfly plugin -->
 			<plugin>
 				<groupId>org.wildfly.plugins</groupId>
 				<artifactId>wildfly-maven-plugin</artifactId>
 				<version>1.2.0.Alpha4</version>
-				
+
 				<executions>
 					<execution>
 						<phase>install</phase>
