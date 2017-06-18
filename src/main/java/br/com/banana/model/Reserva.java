@@ -2,7 +2,6 @@ package br.com.banana.model;
 
 import java.util.Calendar;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,10 +23,10 @@ public class Reserva {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@OneToOne(cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OneToOne
 	private Local local;
 
-	@OneToOne(cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OneToOne
 	private Sala sala;
 
 	@Temporal(TemporalType.TIMESTAMP)
