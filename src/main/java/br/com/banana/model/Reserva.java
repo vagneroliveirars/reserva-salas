@@ -9,6 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Classe que representa uma reserva
@@ -16,8 +19,25 @@ import javax.persistence.TemporalType;
  * @author vagner
  *
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 public class Reserva {
+	
+	public Reserva() { }
+	
+	public Reserva(Local local, Sala sala, Calendar dataHoraInicio, Calendar dataHoraFim, String responsavel,
+			Boolean cafe, Long quantidadePessoas, String descricao) {
+		
+		this.local = local;
+		this.sala = sala;
+		this.dataHoraInicio = dataHoraInicio;
+		this.dataHoraFim = dataHoraFim;
+		this.responsavel = responsavel;
+		this.cafe = cafe;
+		this.quantidadePessoas = quantidadePessoas;
+		this.descricao = descricao;
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
