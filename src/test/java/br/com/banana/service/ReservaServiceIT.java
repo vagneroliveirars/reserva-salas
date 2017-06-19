@@ -1,6 +1,7 @@
 package br.com.banana.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Calendar;
 
@@ -8,10 +9,11 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.glassfish.jersey.jettison.JettisonFeature;
+import org.junit.Before;
 import org.junit.Test;
 
 import br.com.banana.model.Local;
@@ -27,8 +29,14 @@ import br.com.banana.model.Sala;
 public class ReservaServiceIT {
 	
 	private static String SERVICES_CONTEXT = "http://localhost:8080/reserva-salas-0.0.1-SNAPSHOT";
+
+	private WebTarget target;
 	
-	private static String RESERVAS_CONTEXT = SERVICES_CONTEXT + "/reservas";
+	@Before
+	public void setup() {
+		Client client = ClientBuilder.newClient();
+		this.target = client.target(SERVICES_CONTEXT).path("reservas");
+	}
 	
 	@Test
 	public void testeAdicionaReserva() throws Exception {
@@ -47,49 +55,154 @@ public class ReservaServiceIT {
 		Reserva reserva = new Reserva(local, sala, dataHoraInicio, dataHoraFim, "Vagner", true, 10l,
 				"Reserva de teste 1");
 		
+		Response response = this.target.request(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(reserva, MediaType.APPLICATION_JSON));
 		
-		
-		/*
-		Client client = ClientBuilder.newClient();
-		WebTarget target = client.target(RESERVAS_CONTEXT);
-		Response response = target.request().accept(MediaType.APPLICATION_JSON).get();
-		*/
-		
-		/*
-		Client client = ClientBuilder.newClient( new ClientConfig().register( LoggingFilter.class ) );
-		WebTarget webTarget = client.target(RESERVAS_CONTEXT);
-		
-		Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
-		Response response = invocationBuilder.post(Entity.entity(reserva, MediaType.APPLICATION_JSON));
-		
-		assertNotNull(response);
-		assertEquals(201, response.getStatus());
-		/*
-		
-		/*
 		assertNotNull(response);
 		assertEquals(201, response.getStatus());
 		assertNotNull(response.getLocation());
-		*/
+	}
+	
+	@Test
+	public void testeBuscaReservaPorId() {
+		Local local = new Local();
+		local.setId(1l);
 		
-		String json = "{\n" + 
-				"\"local\": {\"id\":1},\n" + 
-				"\"sala\":{\"id\":1},\n" + 
-				"\"dataHoraInicio\":1347915600000,\n" + 
-				"\"dataHoraFim\":1347918300000,\n" + 
-				"\"responsavel\":\"Vanda\",\n" + 
-				"\"cafe\":true,\n" + 
-				"\"quantidadePessoas\":30,\n" + 
-				"\"descricao\":\"Terceira reuniao\"\n" + 
-				"}";
+		Sala sala = new Sala();
+		sala.setId(1l);
 		
-		Client client = ClientBuilder.newClient().register(JettisonFeature.class);
-		WebTarget target = client.target("http://localhost:8080/reserva-salas-0.0.1-SNAPSHOT/").path("reservas");
+		Calendar dataHoraInicio = Calendar.getInstance();
+		dataHoraInicio.set(2017, Calendar.JANUARY, 2, 10, 0);
 		
-		Response response = target.request(MediaType.APPLICATION_JSON)
-				.post(Entity.json(reserva));
+		Calendar dataHoraFim = Calendar.getInstance();
+		dataHoraFim.set(2017, Calendar.JANUARY, 2, 11, 0);
 		
+		Reserva reserva = new Reserva(local, sala, dataHoraInicio, dataHoraFim, "Vagner", true, 10l,
+				"Reserva de teste 2");
+		
+		Response response = this.target.request(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(reserva, MediaType.APPLICATION_JSON));
+		
+		Link link = Link.fromUri(response.getLocation()).build();
+		
+		reserva = ClientBuilder.newClient()				
+				.invocation(link)
+				.accept(MediaType.APPLICATION_JSON)
+				.get(Reserva.class);
+		
+		assertNotNull(reserva);
+		assertEquals("Reserva de teste 2", reserva.getDescricao());
+	}
+	
+	@Test
+	public void testeAtualizaReserva() {
+		Local local = new Local();
+		local.setId(1l);
+		
+		Sala sala = new Sala();
+		sala.setId(1l);
+		
+		Calendar dataHoraInicio = Calendar.getInstance();
+		dataHoraInicio.set(2017, Calendar.JANUARY, 3, 12, 0);
+		
+		Calendar dataHoraFim = Calendar.getInstance();
+		dataHoraFim.set(2017, Calendar.JANUARY, 3, 13, 0);
+		
+		Reserva reserva = new Reserva(local, sala, dataHoraInicio, dataHoraFim, "Vagner", true, 10l,
+				"Reserva de teste 2");
+		
+		Response response = this.target.request(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(reserva, MediaType.APPLICATION_JSON));
+		
+		Link link = Link.fromUri(response.getLocation()).build();
+		
+		reserva = ClientBuilder.newClient()				
+				.invocation(link)
+				.accept(MediaType.APPLICATION_JSON)
+				.get(Reserva.class);
+		
+		reserva.setDescricao("Teste de update");
+		
+		response = this.target.request(MediaType.APPLICATION_JSON)
+				.put(Entity.entity(reserva, MediaType.APPLICATION_JSON));
+		
+		assertNotNull(response);
+		assertEquals(204, response.getStatus());
+	}
+	
+	@Test
+	public void testeDeletaReserva() {
+		Local local = new Local();
+		local.setId(1l);
+		
+		Sala sala = new Sala();
+		sala.setId(1l);
+		
+		Calendar dataHoraInicio = Calendar.getInstance();
+		dataHoraInicio.set(2016, Calendar.JANUARY, 4, 14, 0);
+		
+		Calendar dataHoraFim = Calendar.getInstance();
+		dataHoraFim.set(2016, Calendar.JANUARY, 4, 15, 0);
+		
+		Reserva reserva = new Reserva(local, sala, dataHoraInicio, dataHoraFim, "Vagner", true, 10l,
+				"Reserva de teste 2");
+		
+		Response response = this.target.request(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(reserva, MediaType.APPLICATION_JSON));
+		
+		Link link = Link.fromUri(response.getLocation()).build();
+		
+		response = ClientBuilder.newClient()				
+				.invocation(link)
+				.accept(MediaType.APPLICATION_JSON)
+				.delete();
+		
+		assertNotNull(response);
+		assertEquals(204, response.getStatus());
+	}
+	
+	@Test
+	public void testeChoqueDeHorarios() {
+		Local local = new Local();
+		local.setId(1l);
+		
+		Sala sala = new Sala();
+		sala.setId(1l);
+		
+		Calendar dataHoraInicio = Calendar.getInstance();
+		dataHoraInicio.set(2017, Calendar.JANUARY, 5, 8, 0);
+		
+		Calendar dataHoraFim = Calendar.getInstance();
+		dataHoraFim.set(2017, Calendar.JANUARY, 5, 9, 0);
+		
+		Reserva reserva = new Reserva(local, sala, dataHoraInicio, dataHoraFim, "Vagner", true, 10l,
+				"Reserva de teste 1");
+		
+		Response response = this.target.request(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(reserva, MediaType.APPLICATION_JSON));
+		
+		assertNotNull(response);
 		assertEquals(201, response.getStatus());
+		assertNotNull(response.getLocation());
+		
+		Link link = Link.fromUri(response.getLocation()).build();
+		
+		response = this.target.request(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(reserva, MediaType.APPLICATION_JSON));
+		
+		assertNotNull(response);
+		assertEquals(409, response.getStatus());
+		
+		reserva = ClientBuilder.newClient()				
+				.invocation(link)
+				.accept(MediaType.APPLICATION_JSON)
+				.get(Reserva.class);
+		
+		response = this.target.request(MediaType.APPLICATION_JSON)
+				.put(Entity.entity(reserva, MediaType.APPLICATION_JSON));
+	
+		assertNotNull(response);
+		assertEquals(409, response.getStatus());
 	}
 		
 }
