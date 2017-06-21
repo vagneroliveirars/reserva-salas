@@ -1,3 +1,4 @@
+import { LocalService } from './../locais/local.service';
 import { Sala } from './../salas/sala.model';
 import { Local } from './../locais/local.model';
 import { Reserva } from './reserva.model';
@@ -14,16 +15,27 @@ import { Location } from '@angular/common';
 export class ReservaDetalheComponent implements OnInit {
 
     reserva: Reserva;
+    locais: Local[];
     private isNew: boolean = true;
 
     constructor(
         private reservaService: ReservaService,
+        private localService: LocalService,
         private route: ActivatedRoute,
         private location: Location
     ) {}
     
     ngOnInit(): void {
         this.reserva = new Reserva(0, new Local(0, '', []), new Sala(0, ''), new Date(), new Date(), '', false, 0, '');
+
+        this.locais = [];
+
+        this.localService.findAll()
+            .then((locais: Local[]) => {
+                this.locais = locais;
+            });
+
+        console.log(this.locais);
 
         // extrai o parâmetro da rota
         this.route.params.forEach((params: Params) => {
@@ -73,5 +85,5 @@ export class ReservaDetalheComponent implements OnInit {
     goBack(): void {
         this.location.back();
     }
-
+    
 }

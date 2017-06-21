@@ -20,8 +20,8 @@
 					<tr>
 						<th>Local</th>
 						<th>Sala</th>
-						<th>Data Início</th>
-						<th>Data Fim</th>
+						<th>Data Hora Início</th>
+						<th>Data Hora Fim</th>
 						<th>Responsável</th>
 						<th>Descrição</th>
 					</tr>
@@ -31,7 +31,7 @@
 					<tr *ngIf="reservas.length == 0">
 						<td colspan="7" align="center">Nenhuma reserva cadastrada</td>
 					</tr>
-					<tr *ngFor="let r of reservas" [routerLink]="['/reserva/save', r.id]">
+					<tr *ngFor="let r of reservas" [routerLink]="['/reserva/save', r.id]" style="cursor: pointer">
 						<th>{{ r.local.descricao }}</th>
 						<th>{{ r.sala.descricao }}</th>
 						<th>{{ r.dataHoraInicio }}</th>
