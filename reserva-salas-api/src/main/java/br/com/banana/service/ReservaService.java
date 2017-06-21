@@ -148,8 +148,9 @@ public class ReservaService {
 	private void validaChoqueHorarios(Reserva reserva) throws ReservaJaExisteException {
 		Long count = this.entityManager.createQuery(
 				"select	count(r) from Reserva r where local_id=:local_id and sala_id=:sala_id"
-				+ " and dataHoraInicio between :dataHoraInicio and :dataHoraFim"
-				+ " or dataHoraFim between :dataHoraInicio and :dataHoraFim",
+				+ " and dataHoraInicio <= :dataHoraInicio and dataHoraFim >= :dataHoraFim"				
+				+ " or (dataHoraInicio between :dataHoraInicio and :dataHoraFim"
+				+ " or dataHoraFim between :dataHoraInicio and :dataHoraFim)",
 				Long.class)
 				.setParameter("local_id", reserva.getLocal().getId())
 				.setParameter("sala_id", reserva.getSala().getId())

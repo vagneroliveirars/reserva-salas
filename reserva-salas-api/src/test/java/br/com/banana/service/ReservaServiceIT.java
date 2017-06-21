@@ -28,7 +28,7 @@ import br.com.banana.model.Sala;
  */
 public class ReservaServiceIT {
 	
-	private static String SERVICES_CONTEXT = "http://localhost:8080/reserva-salas-0.0.1-SNAPSHOT";
+	private static String SERVICES_CONTEXT = "http://localhost:8080/reserva-salas";
 
 	private WebTarget target;
 	
@@ -47,10 +47,10 @@ public class ReservaServiceIT {
 		sala.setId(1l);
 		
 		Calendar dataHoraInicio = Calendar.getInstance();
-		dataHoraInicio.set(2017, Calendar.JANUARY, 1, 8, 0);
+		dataHoraInicio.set(2016, Calendar.JANUARY, 1, 8, 0);
 		
 		Calendar dataHoraFim = Calendar.getInstance();
-		dataHoraFim.set(2017, Calendar.JANUARY, 1, 9, 0);
+		dataHoraFim.set(2016, Calendar.JANUARY, 1, 9, 0);
 		
 		Reserva reserva = new Reserva(local, sala, dataHoraInicio, dataHoraFim, "Vagner", true, 10l,
 				"Reserva de teste 1");
@@ -72,10 +72,10 @@ public class ReservaServiceIT {
 		sala.setId(1l);
 		
 		Calendar dataHoraInicio = Calendar.getInstance();
-		dataHoraInicio.set(2017, Calendar.JANUARY, 2, 10, 0);
+		dataHoraInicio.set(2016, Calendar.JANUARY, 2, 10, 0);
 		
 		Calendar dataHoraFim = Calendar.getInstance();
-		dataHoraFim.set(2017, Calendar.JANUARY, 2, 11, 0);
+		dataHoraFim.set(2016, Calendar.JANUARY, 2, 11, 0);
 		
 		Reserva reserva = new Reserva(local, sala, dataHoraInicio, dataHoraFim, "Vagner", true, 10l,
 				"Reserva de teste 2");
@@ -103,10 +103,10 @@ public class ReservaServiceIT {
 		sala.setId(1l);
 		
 		Calendar dataHoraInicio = Calendar.getInstance();
-		dataHoraInicio.set(2017, Calendar.JANUARY, 3, 12, 0);
+		dataHoraInicio.set(2016, Calendar.JANUARY, 3, 12, 0);
 		
 		Calendar dataHoraFim = Calendar.getInstance();
-		dataHoraFim.set(2017, Calendar.JANUARY, 3, 13, 0);
+		dataHoraFim.set(2016, Calendar.JANUARY, 3, 13, 0);
 		
 		Reserva reserva = new Reserva(local, sala, dataHoraInicio, dataHoraFim, "Vagner", true, 10l,
 				"Reserva de teste 2");
@@ -170,26 +170,85 @@ public class ReservaServiceIT {
 		sala.setId(1l);
 		
 		Calendar dataHoraInicio = Calendar.getInstance();
-		dataHoraInicio.set(2017, Calendar.JANUARY, 5, 8, 0);
-		
+		dataHoraInicio.set(2017, Calendar.JANUARY, 1, 8, 0, 0);
 		Calendar dataHoraFim = Calendar.getInstance();
-		dataHoraFim.set(2017, Calendar.JANUARY, 5, 9, 0);
+		dataHoraFim.set(2017, Calendar.JANUARY, 1, 9, 0, 0);
 		
 		Reserva reserva = new Reserva(local, sala, dataHoraInicio, dataHoraFim, "Vagner", true, 10l,
 				"Reserva de teste 1");
 		
 		Response response = this.target.request(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(reserva, MediaType.APPLICATION_JSON));
-		
 		assertNotNull(response);
 		assertEquals(201, response.getStatus());
 		assertNotNull(response.getLocation());
 		
+		dataHoraInicio.set(2017, Calendar.JANUARY, 1, 8, 15, 0);
+		dataHoraFim.set(2017, Calendar.JANUARY, 1, 8, 30, 0);
+		reserva.setDataHoraInicio(dataHoraInicio);
+		reserva.setDataHoraFim(dataHoraFim);
+		
 		response = this.target.request(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(reserva, MediaType.APPLICATION_JSON));
-		
 		assertNotNull(response);
 		assertEquals(409, response.getStatus());
+		
+		
+		dataHoraInicio.set(2017, Calendar.JANUARY, 1, 7, 0, 0);
+		dataHoraFim.set(2017, Calendar.JANUARY, 1, 10, 0, 0);
+		reserva.setDataHoraInicio(dataHoraInicio);
+		reserva.setDataHoraFim(dataHoraFim);
+		
+		response = this.target.request(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(reserva, MediaType.APPLICATION_JSON));
+		assertNotNull(response);
+		assertEquals(409, response.getStatus());
+		
+		
+		dataHoraInicio.set(2017, Calendar.JANUARY, 1, 7, 0, 0);
+		dataHoraFim.set(2017, Calendar.JANUARY, 1, 8, 0, 0);
+		reserva.setDataHoraInicio(dataHoraInicio);
+		reserva.setDataHoraFim(dataHoraFim);
+		
+		response = this.target.request(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(reserva, MediaType.APPLICATION_JSON));
+		assertNotNull(response);
+		assertEquals(409, response.getStatus());
+		
+		
+		dataHoraInicio.set(2017, Calendar.JANUARY, 1, 9, 0, 0);
+		dataHoraFim.set(2017, Calendar.JANUARY, 1, 10, 0, 0);
+		reserva.setDataHoraInicio(dataHoraInicio);
+		reserva.setDataHoraFim(dataHoraFim);
+		
+		response = this.target.request(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(reserva, MediaType.APPLICATION_JSON));
+		assertNotNull(response);
+		assertEquals(409, response.getStatus());
+		
+		
+		dataHoraInicio.set(2017, Calendar.JANUARY, 1, 7, 0, 0);
+		dataHoraFim.set(2017, Calendar.JANUARY, 1, 7, 59, 0);
+		reserva.setDataHoraInicio(dataHoraInicio);
+		reserva.setDataHoraFim(dataHoraFim);
+		
+		response = this.target.request(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(reserva, MediaType.APPLICATION_JSON));
+		assertNotNull(response);
+		assertEquals(201, response.getStatus());
+		assertNotNull(response.getLocation());
+		
+		
+		dataHoraInicio.set(2017, Calendar.JANUARY, 1, 9, 1, 0);
+		dataHoraFim.set(2017, Calendar.JANUARY, 1, 10, 0, 0);
+		reserva.setDataHoraInicio(dataHoraInicio);
+		reserva.setDataHoraFim(dataHoraFim);
+		
+		response = this.target.request(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(reserva, MediaType.APPLICATION_JSON));
+		assertNotNull(response);
+		assertEquals(201, response.getStatus());
+		assertNotNull(response.getLocation());
 	}
 		
 }
