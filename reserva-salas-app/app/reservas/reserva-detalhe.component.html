@@ -1,0 +1,21 @@
+<div class="container">
+	
+	<h2>Salvar reserva</h2>
+	
+	<form (ngSubmit)="onSubmit()" #reservaForm="ngForm" novalidate>
+		<div [ngClass]="getFormGroupClass(descricao.valid, descricao.pristine)">
+			<label for="descricao" class="form-control-label">Descrição</label>
+			<input type="text" placeholder="Insira a descrição"
+				[ngClass]="getFormControlClass(descricao.valid, descricao.pristine)"
+				required
+				#descricao="ngModel"
+				name="descricao"
+				[(ngModel)]="reserva.descricao"/>		
+			<div class="form-control-feedback" [hidden]="descricao.valid || descricao.pristine">O campo descrição é obrigatório</div>
+		</div>		
+		
+		<button type="submit" class="btn btn-success" [disabled]="!reservaForm.form.valid">Salvar</button>
+		<a class="btn btn-secondary" (click)="goBack()">Voltar</a>
+	</form>	
+		
+</div>

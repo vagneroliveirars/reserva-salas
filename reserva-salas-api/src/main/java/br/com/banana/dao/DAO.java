@@ -18,10 +18,10 @@ public class DAO<T> implements Serializable {
 
 	private static final long serialVersionUID = 3265575551784280498L;
 
+	private final Class<T> classe;
+	
 	@PersistenceContext
 	private EntityManager entityManager;
-	
-	private final Class<T> classe;
 
 	public DAO(Class<T> classe) {
 		this.classe = classe;

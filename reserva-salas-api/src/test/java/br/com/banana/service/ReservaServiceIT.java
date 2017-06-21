@@ -185,22 +185,9 @@ public class ReservaServiceIT {
 		assertEquals(201, response.getStatus());
 		assertNotNull(response.getLocation());
 		
-		Link link = Link.fromUri(response.getLocation()).build();
-		
 		response = this.target.request(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(reserva, MediaType.APPLICATION_JSON));
 		
-		assertNotNull(response);
-		assertEquals(409, response.getStatus());
-		
-		reserva = ClientBuilder.newClient()				
-				.invocation(link)
-				.accept(MediaType.APPLICATION_JSON)
-				.get(Reserva.class);
-		
-		response = this.target.request(MediaType.APPLICATION_JSON)
-				.put(Entity.entity(reserva, MediaType.APPLICATION_JSON));
-	
 		assertNotNull(response);
 		assertEquals(409, response.getStatus());
 	}
