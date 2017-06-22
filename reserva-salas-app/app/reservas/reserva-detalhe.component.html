@@ -3,6 +3,18 @@
 	<h2>Salvar reserva</h2>
 	
 	<form (ngSubmit)="onSubmit()" #reservaForm="ngForm" novalidate>
+
+		<div [ngClass]="getFormGroupClass(local.valid, local.pristine)">
+			<label for="local" class="form-control-label">Local</label>
+			<select [(ngModel)]="reserva.local"
+				[ngClass]="getFormControlClass(local.valid, local.pristine)"
+				required
+				#local="ngModel"
+				name="local">				
+				<option *ngFor="let l of locais" [ngValue]="l">{{l.descricao}}</option>
+			</select>
+			<div class="form-control-feedback" [hidden]="local.valid || local.pristine">O campo local é obrigatório</div>
+		</div>
 		
 		<div [ngClass]="getFormGroupClass(dataHoraInicio.valid, dataHoraInicio.pristine)">
 			<label for="dataHoraInicio" class="form-control-label">Data Hora Início</label>

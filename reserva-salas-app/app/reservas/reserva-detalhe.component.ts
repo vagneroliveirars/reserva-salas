@@ -33,10 +33,9 @@ export class ReservaDetalheComponent implements OnInit {
         this.localService.findAll()
             .then((locais: Local[]) => {
                 this.locais = locais;
+                console.log(this.locais);
             });
-
-        console.log(this.locais);
-
+      
         // extrai o parâmetro da rota
         this.route.params.forEach((params: Params) => {
             let id: number = +params['id'];
@@ -47,6 +46,8 @@ export class ReservaDetalheComponent implements OnInit {
                 this.reservaService.find(id)
                 .then((reserva: Reserva) => {
                     this.reserva = reserva;
+
+                    console.log(this.reserva.local);
                 });
             }                        
         });      

@@ -20,7 +20,7 @@ import { DialogService } from './dialog.service';
         ReservasModule,
         FormsModule,
         HttpModule,
-        InMemoryWebApiModule.forRoot(InMemoryDataService)
+        InMemoryWebApiModule.forRoot(InMemoryDataService, {passThruUnknownUrl: true})
     ],
     declarations: [AppComponent],
     providers: [
