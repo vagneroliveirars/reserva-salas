@@ -23,7 +23,7 @@ export class InMemoryDataService implements InMemoryDbService {
         ];
 
         return {
-            'reservas': reservas,
+            'motos': reservas,
             'carros': carros
         };
     }
