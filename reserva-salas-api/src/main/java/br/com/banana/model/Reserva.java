@@ -13,6 +13,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * Classe que representa uma reserva
  * 
@@ -49,9 +51,11 @@ public class Reserva {
 	@OneToOne
 	private Sala sala;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm", timezone="GMT-3")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar dataHoraInicio;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm", timezone="GMT-3")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar dataHoraFim;
 
