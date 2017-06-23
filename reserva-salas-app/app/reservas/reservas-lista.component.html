@@ -34,8 +34,8 @@
 					<tr *ngFor="let r of reservas" [routerLink]="['/reserva/save', r.id]" style="cursor: pointer">
 						<th>{{ r.local.descricao }}</th>
 						<th>{{ r.sala.descricao }}</th>
-						<th>{{ r.dataHoraInicio }}</th>
-						<th>{{ r.dataHoraFim }}</th>
+						<th>{{ r.dataHoraInicio | date:'dd/MM/yyyy HH:mm' }}</th>
+						<th>{{ r.dataHoraFim | date:'dd/MM/yyyy HH:mm' }}</th>
 						<th>{{ r.responsavel }}</th>
 						<th>{{ r.descricao }}</th>
 						<th><button class="btn btn-danger" (click)="onDelete(r); $event.stopPropagation()">Deletar</button></th>

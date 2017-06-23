@@ -28,7 +28,7 @@ export class ReservaDetalheComponent implements OnInit {
     ) {}
     
     ngOnInit(): void {
-        this.reserva = new Reserva(null, null, null, new Date(), new Date(), '', false, null, '');
+        this.reserva = new Reserva(null, null, null, null, null, '', false, null, '');
 
         this.locais = [];
 
@@ -75,8 +75,10 @@ export class ReservaDetalheComponent implements OnInit {
     }
 
     onSubmit(): void {
-        let promise;
+        let promise;        
 
+        console.log(this.reserva.dataHoraInicio);
+        
         if (this.isNew) {
             console.log('Cadastrar reserva');
             promise = this.reservaService.create(this.reserva);
@@ -92,12 +94,10 @@ export class ReservaDetalheComponent implements OnInit {
         this.location.back();
     }
 
-    findSalasByLocalId(idLocal: number) {
-        console.log("local mudou");
+    findSalasByLocalId(idLocal: number) {        
         this.localService.findSalasByLocalId(idLocal)
         .then((salas: Sala[]) => {
-            this.salas = salas;
-            console.log(this.salas);
+            this.salas = salas;            
         });
     }
 

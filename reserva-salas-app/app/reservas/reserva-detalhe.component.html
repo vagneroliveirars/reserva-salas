@@ -30,7 +30,7 @@
 		
 		<div [ngClass]="getFormGroupClass(dataHoraInicio.valid, dataHoraInicio.pristine)">
 			<label for="dataHoraInicio" class="form-control-label">Data Hora Início</label>
-			<input type="datetime" placeholder="Insira a data hora início"
+			<input type="datetime-local" placeholder="Insira a data hora início"
 				[ngClass]="getFormControlClass(dataHoraInicio.valid, dataHoraInicio.pristine)"
 				required
 				#dataHoraInicio="ngModel"
@@ -41,7 +41,7 @@
 
 		<div [ngClass]="getFormGroupClass(dataHoraFim.valid, dataHoraFim.pristine)">
 			<label for="dataHoraFim" class="form-control-label">Data Hora Fim</label>
-			<input type="datetime" placeholder="Insira a data hora fim"
+			<input type="datetime-local" placeholder="Insira a data hora fim"
 				[ngClass]="getFormControlClass(dataHoraFim.valid, dataHoraFim.pristine)"
 				required
 				#dataHoraFim="ngModel"

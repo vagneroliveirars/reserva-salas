@@ -22,9 +22,7 @@ export class LocalService {
     }
 
     findSalasByLocalId(idLocal: number): Promise<Sala[]> {
-        const url = `${this.locaisUrl}/${idLocal}/salas`;    // url/locais/:id/salas
-
-        console.log("URL >>> " + url);
+        const url = `${this.locaisUrl}/${idLocal}/salas`;    // url/locais/:id/salas       
 
         return this.http.get(url)
             .toPromise()
