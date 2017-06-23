@@ -1,3 +1,4 @@
+import { Sala } from './../salas/sala.model';
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 
@@ -19,6 +20,17 @@ export class LocalService {
             .then(this.extractData)
             .catch(this.handleError);
     }
+
+    findSalasByLocalId(idLocal: number): Promise<Sala[]> {
+        const url = `${this.locaisUrl}/${idLocal}/salas`;    // url/locais/:id/salas
+
+        console.log("URL >>> " + url);
+
+        return this.http.get(url)
+            .toPromise()
+            .then(this.extractData)
+            .catch(this.handleError);      
+    }
     
     private handleError(error: any): Promise<any> {
         console.log('Error: ', error);
@@ -26,7 +38,7 @@ export class LocalService {
     }
 
     private extractData(response: Response) {
-          let body = <Local[]>response.json();
+          let body = response.json();
           return body || {};
     }
 

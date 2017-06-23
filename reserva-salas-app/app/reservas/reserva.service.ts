@@ -30,24 +30,23 @@ export class ReservaService implements ServiceInterface<Reserva> {
     find(id: number): Promise<Reserva> {
         const url = `${this.reservasUrl}/${id}`;    // url/reservas/:id
 
-        return this.findAll()
-            .then((reservas: Reserva[]) => reservas.find(reserva => reserva.id === id));
+        return this.http.get(url)
+            .toPromise()
+            .then(this.extractData)
+            .catch(this.handleError);      
     }
 
     create(reserva: Reserva): Promise<Reserva> {
         return this.http
             .post(this.reservasUrl, JSON.stringify(reserva), {headers: this.headers})
             .toPromise()
-            .then((response: Response) => response.json().data as Reserva)            
+            .then(() => reserva as Reserva)
             .catch(this.handleError);
     }
 
-    update(reserva: Reserva): Promise<Reserva> {
-        // utiliza nova anotação do ECMAScript 6
-        const url = `${this.reservasUrl}/${reserva.id}`;    // app/reservas/:id
-
+    update(reserva: Reserva): Promise<Reserva> {    
         return this.http
-            .put(url, JSON.stringify(reserva), {headers: this.headers})
+            .put(this.reservasUrl, JSON.stringify(reserva), {headers: this.headers})
             .toPromise()
             .then(() => reserva as Reserva)            
             .catch(this.handleError);
@@ -60,15 +59,9 @@ export class ReservaService implements ServiceInterface<Reserva> {
         return this.http
             .delete(url, {headers: this.headers})
             .toPromise()
-            .then(() => reserva as Reserva)            
+            .then(() => reserva as Reserva)
             .catch(this.handleError);
-    }     
-
-    getReservasSlowly(): Promise<Reserva[]> {
-        return new Promise((resolve, reject) => {
-            setTimeout(resolve, 6000);
-        }).then(() => this.findAll());
-    }
+    }        
 
     search(termo: string): Observable<Reserva[]> {
         return this.http
@@ -77,7 +70,7 @@ export class ReservaService implements ServiceInterface<Reserva> {
     }
 
     private extractData(response: Response) {
-          let body = response.json();                   
+          let body = response.json();           
           return body || {};
     }
 

@@ -6,7 +6,7 @@
 
 		<div [ngClass]="getFormGroupClass(local.valid, local.pristine)">
 			<label for="local" class="form-control-label">Local</label>
-			<select [(ngModel)]="reserva.local"
+			<select [(ngModel)]="reserva.local" (ngModelChange)="onChangeLocal($event)"
 				[ngClass]="getFormControlClass(local.valid, local.pristine)"
 				required
 				#local="ngModel"
@@ -14,6 +14,18 @@
 				<option *ngFor="let l of locais" [ngValue]="l">{{l.descricao}}</option>
 			</select>
 			<div class="form-control-feedback" [hidden]="local.valid || local.pristine">O campo local é obrigatório</div>
+		</div>
+
+		<div [ngClass]="getFormGroupClass(sala.valid, sala.pristine)">
+			<label for="sala" class="form-control-label">Sala</label>
+			<select [(ngModel)]="reserva.sala"
+				[ngClass]="getFormControlClass(sala.valid, sala.pristine)"
+				required
+				#sala="ngModel"
+				name="sala">				
+				<option *ngFor="let s of salas" [ngValue]="s">{{s.descricao}}</option>
+			</select>
+			<div class="form-control-feedback" [hidden]="sala.valid || sala.pristine">O campo sala é obrigatório</div>
 		</div>
 		
 		<div [ngClass]="getFormGroupClass(dataHoraInicio.valid, dataHoraInicio.pristine)">
@@ -59,7 +71,7 @@
 
 		<div [ngClass]="getFormGroupClass(quantidadePessoas.valid, quantidadePessoas.pristine)">
 			<label for="quantidadePessoas" class="form-control-label">Quantidade de Pessoas</label>
-			<input type="text" placeholder="Insira a quantidade de pessoas"
+			<input type="number" placeholder="Insira a quantidade de pessoas"
 				[ngClass]="getFormControlClass(quantidadePessoas.valid, quantidadePessoas.pristine)"				
 				#quantidadePessoas="ngModel"
 				name="quantidadePessoas"
