@@ -1,7 +1,6 @@
 package br.com.banana.service;
 
 import java.net.URI;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -51,14 +50,6 @@ public class ReservaService {
 		List<Reserva> reservas = this.entityManager
 				.createQuery("select r from Reserva r", Reserva.class)
 				.getResultList();
-		
-		if (!reservas.isEmpty()) {
-			System.out.println("DIA " + reservas.get(0).getDataHoraFim().get(Calendar.DAY_OF_MONTH));
-			System.out.println("MES " + reservas.get(0).getDataHoraFim().get(Calendar.MONTH));
-			System.out.println("ANO " + reservas.get(0).getDataHoraFim().get(Calendar.YEAR));
-			System.out.println("HORA " + reservas.get(0).getDataHoraFim().get(Calendar.HOUR_OF_DAY));
-			System.out.println("MINUTO " + reservas.get(0).getDataHoraFim().get(Calendar.MINUTE));
-		}
 
 		return Response.ok(reservas).build();
 	}
@@ -90,21 +81,11 @@ public class ReservaService {
 	 */
 	@POST
 	public Response adiciona(@Context UriInfo uriInfo, Reserva reserva) {
-		/*
 		try {
 			validaChoqueHorarios(reserva);
 		} catch (ReservaJaExisteException e) {
 			throw new WebApplicationException(Status.CONFLICT);
 		}
-		*/
-		
-		this.entityManager.persist(reserva);
-		
-		System.out.println("DIA " + reserva.getDataHoraFim().get(Calendar.DAY_OF_MONTH));
-		System.out.println("MES " + reserva.getDataHoraFim().get(Calendar.MONTH));
-		System.out.println("ANO " + reserva.getDataHoraFim().get(Calendar.YEAR));
-		System.out.println("HORA " + reserva.getDataHoraFim().get(Calendar.HOUR_OF_DAY));
-		System.out.println("MINUTO " + reserva.getDataHoraFim().get(Calendar.MINUTE));
 		
 		// Constrói a URL onde o recurso está disponível
 		UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
@@ -163,17 +144,34 @@ public class ReservaService {
 	 * @throws ReservaJaExisteException
 	 */
 	private void validaChoqueHorarios(Reserva reserva) throws ReservaJaExisteException {
-		Long count = this.entityManager.createQuery(
-				"select	count(r) from Reserva r where local_id=:local_id and sala_id=:sala_id"
-				+ " and dataHoraInicio <= :dataHoraInicio and dataHoraFim >= :dataHoraFim"				
-				+ " or (dataHoraInicio between :dataHoraInicio and :dataHoraFim"
-				+ " or dataHoraFim between :dataHoraInicio and :dataHoraFim)",
-				Long.class)
-				.setParameter("local_id", reserva.getLocal().getId())
-				.setParameter("sala_id", reserva.getSala().getId())
-				.setParameter("dataHoraInicio", reserva.getDataHoraInicio())
-				.setParameter("dataHoraFim", reserva.getDataHoraFim())
-				.getSingleResult();
+		Long count = 0l;
+		
+		if (reserva.getId() != null) {
+			count = this.entityManager.createQuery(
+					"select	count(r) from Reserva r where local_id=:local_id and sala_id=:sala_id"
+					+ " and dataHoraInicio <= :dataHoraInicio and dataHoraFim >= :dataHoraFim"				
+					+ " or (id!=:id and (dataHoraInicio between :dataHoraInicio and :dataHoraFim"
+					+ " or dataHoraFim between :dataHoraInicio and :dataHoraFim))",
+					Long.class)
+					.setParameter("id", reserva.getId())
+					.setParameter("local_id", reserva.getLocal().getId())
+					.setParameter("sala_id", reserva.getSala().getId())
+					.setParameter("dataHoraInicio", reserva.getDataHoraInicio())
+					.setParameter("dataHoraFim", reserva.getDataHoraFim())
+					.getSingleResult();
+		} else {
+			count = this.entityManager.createQuery(
+					"select	count(r) from Reserva r where local_id=:local_id and sala_id=:sala_id"
+					+ " and dataHoraInicio <= :dataHoraInicio and dataHoraFim >= :dataHoraFim"				
+					+ " or (dataHoraInicio between :dataHoraInicio and :dataHoraFim"
+					+ " or dataHoraFim between :dataHoraInicio and :dataHoraFim)",
+					Long.class)
+					.setParameter("local_id", reserva.getLocal().getId())
+					.setParameter("sala_id", reserva.getSala().getId())
+					.setParameter("dataHoraInicio", reserva.getDataHoraInicio())
+					.setParameter("dataHoraFim", reserva.getDataHoraFim())
+					.getSingleResult();
+		}
 		
 		if (count > 0) {
 			throw new ReservaJaExisteException();
