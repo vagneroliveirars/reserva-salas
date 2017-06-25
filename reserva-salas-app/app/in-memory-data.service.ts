@@ -7,7 +7,7 @@ export class InMemoryDataService implements InMemoryDbService {
     createDb(): {} {
         let reservas: Reserva[] = [
             {id: 1, 
-                local: {id: 1, descricao: 'Local 1', salas: []},
+                local: {id: 1, descricao: 'Local 1'},
                 sala: {id: 1, descricao: 'Sala Azul'},
                 dataHoraInicio: new Date(),
                 dataHoraFim: new Date(),
@@ -18,8 +18,8 @@ export class InMemoryDataService implements InMemoryDbService {
         ];
 
         let carros: Local[] = [
-            {id: 1, descricao: 'Porto Alegre', salas: []},
-            {id: 2, descricao: 'Rio de Janeiro', salas: []}
+            {id: 1, descricao: 'Porto Alegre'},
+            {id: 2, descricao: 'Rio de Janeiro'}
         ];
 
         return {

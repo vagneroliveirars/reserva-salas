@@ -19,6 +19,9 @@ export class ReservaDetalheComponent implements OnInit {
     locais: Local[];
     salas: Sala[];
     private isNew: boolean = true;
+    mensagem: {};
+    classesCss: {}; 
+    private currentTimeout: any;
 
     constructor(
         private reservaService: ReservaService,
@@ -28,7 +31,8 @@ export class ReservaDetalheComponent implements OnInit {
     ) {}
     
     ngOnInit(): void {
-        this.reserva = new Reserva(null, null, null, null, null, '', false, null, '');
+        this.reserva = new Reserva(null, 
+            new Local(null, null), new Sala(null, null), null, null, '', false, null, '');
 
         this.locais = [];
 
@@ -76,8 +80,6 @@ export class ReservaDetalheComponent implements OnInit {
 
     onSubmit(): void {
         let promise;        
-
-        console.log(this.reserva.dataHoraInicio);
         
         if (this.isNew) {
             console.log('Cadastrar reserva');
@@ -87,7 +89,19 @@ export class ReservaDetalheComponent implements OnInit {
             promise = this.reservaService.update(this.reserva);
         }
 
-        promise.then(reserva => this.goBack());
+        promise.then(() => {
+            this.goBack();
+
+            this.mostrarMensagem({
+                tipo: 'success',
+                texto: 'Reserva Salva!'
+            });                                       
+        }).catch(error => {
+            this.mostrarMensagem({
+                tipo: 'danger',
+                texto: error._body || error
+            });
+        });
     }
 
     goBack(): void {
@@ -102,10 +116,39 @@ export class ReservaDetalheComponent implements OnInit {
     }
 
     onChangeLocal(local) {
+        console.log(local);
+        
         if (local) {
-            this.reserva.sala = null;
-            this.findSalasByLocalId(local.id);
+            this.reserva.sala = new Sala(null, null);            
+            this.findSalasByLocalId(local);
         }
+    }
+
+    /**
+     * Mostra a mensagem e esconde depois de 5 segundos
+     */
+    private mostrarMensagem(mensagem: {tipo: string, texto: string}): void {
+        this.mensagem = mensagem;
+        this.montarClasses(mensagem.tipo);
+                
+        if (this.currentTimeout) {
+            clearTimeout(this.currentTimeout);
+        }
+
+        this.currentTimeout = setTimeout(() => {
+            this.mensagem = undefined;
+        }, 5000);
+    }
+
+    /**
+     * Monta a classe dinamicamente conforme o tipo passado como argumento
+     */
+    private montarClasses(tipo: string): void {
+        this.classesCss = {
+            'alert': true
+        };
+   
+        this.classesCss['alert-' + tipo] = true; // alert-success
     }
     
 }

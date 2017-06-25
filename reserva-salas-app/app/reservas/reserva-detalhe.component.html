@@ -1,29 +1,39 @@
 <div class="container">
 	
 	<h2>Salvar reserva</h2>
+
+	<div [ngClass]="classesCss" role="alert" *ngIf="mensagem">
+		<span [ngSwitch]="mensagem.tipo">
+			<strong *ngSwitchCase="'danger'">Erro!</strong>
+			<strong *ngSwitchCase="'warning'">Alerta!</strong>
+			<strong *ngSwitchCase="'success'">Sucesso!</strong>
+			<strong *ngSwitchDefault>Informação!!</strong>
+		</span>  				
+		{{ mensagem.texto }}
+	</div>
 	
 	<form (ngSubmit)="onSubmit()" #reservaForm="ngForm" novalidate>
 
 		<div [ngClass]="getFormGroupClass(local.valid, local.pristine)">
 			<label for="local" class="form-control-label">Local</label>
-			<select [(ngModel)]="reserva.local" (ngModelChange)="onChangeLocal($event)"
+			<select [(ngModel)]="reserva.local.id" (ngModelChange)="onChangeLocal($event)"
 				[ngClass]="getFormControlClass(local.valid, local.pristine)"
 				required
 				#local="ngModel"
 				name="local">				
-				<option *ngFor="let l of locais" [ngValue]="l">{{l.descricao}}</option>
+				<option *ngFor="let l of locais" [ngValue]="l.id">{{l.descricao}}</option>
 			</select>
 			<div class="form-control-feedback" [hidden]="local.valid || local.pristine">O campo local é obrigatório</div>
 		</div>
 
 		<div [ngClass]="getFormGroupClass(sala.valid, sala.pristine)">
 			<label for="sala" class="form-control-label">Sala</label>
-			<select [(ngModel)]="reserva.sala"
+			<select [(ngModel)]="reserva.sala.id"
 				[ngClass]="getFormControlClass(sala.valid, sala.pristine)"
 				required
 				#sala="ngModel"
 				name="sala">				
-				<option *ngFor="let s of salas" [ngValue]="s">{{s.descricao}}</option>
+				<option *ngFor="let s of salas" [ngValue]="s.id">{{s.descricao}}</option>
 			</select>
 			<div class="form-control-feedback" [hidden]="sala.valid || sala.pristine">O campo sala é obrigatório</div>
 		</div>
@@ -73,8 +83,9 @@
 			<label for="quantidadePessoas" class="form-control-label">Quantidade de Pessoas</label>
 			<input type="number" placeholder="Insira a quantidade de pessoas"
 				[ngClass]="getFormControlClass(quantidadePessoas.valid, quantidadePessoas.pristine)"				
+				[required]="reserva.cafe"
 				#quantidadePessoas="ngModel"
-				name="quantidadePessoas"
+				name="quantidadePessoas"				
 				[(ngModel)]="reserva.quantidadePessoas"/>		
 			<div class="form-control-feedback" [hidden]="quantidadePessoas.valid || quantidadePessoas.pristine">O campo quantidade de pessoas é obrigatório</div>
 		</div>

@@ -27,7 +27,7 @@ export class ReservasListaComponent implements OnInit {
         // Chama o serviço que retorna a lista de reservas
         this.reservaService.findAll()
             .then((reservas: Reserva[]) => {
-                this.reservas = reservas;
+                this.reservas = reservas;           
             }).catch(err => {
                 console.log(err);
                 this.mostrarMensagem({
@@ -68,7 +68,7 @@ export class ReservasListaComponent implements OnInit {
     }
 
     /**
-     * Mostra a mensagem e esconde depois de 3 segundos
+     * Mostra a mensagem e esconde depois de 5 segundos
      */
     private mostrarMensagem(mensagem: {tipo: string, texto: string}): void {
         this.mensagem = mensagem;
@@ -80,7 +80,7 @@ export class ReservasListaComponent implements OnInit {
 
         this.currentTimeout = setTimeout(() => {
             this.mensagem = undefined;
-        }, 3000);
+        }, 5000);
     }
 
     /**
