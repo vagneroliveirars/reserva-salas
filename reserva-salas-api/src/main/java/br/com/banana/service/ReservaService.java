@@ -14,7 +14,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -83,9 +82,11 @@ public class ReservaService {
 	public Response adiciona(@Context UriInfo uriInfo, Reserva reserva) {
 		try {
 			validaChoqueHorarios(reserva);
-		} catch (ReservaJaExisteException e) {
-			throw new WebApplicationException(Status.CONFLICT);
+		} catch (Exception e) {
+			return Response.status(Status.CONFLICT).entity(e.getMessage()).build();
 		}
+		
+		this.entityManager.persist(reserva);
 		
 		// Constrói a URL onde o recurso está disponível
 		UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
@@ -108,8 +109,8 @@ public class ReservaService {
 		
 		try {
 			validaChoqueHorarios(reserva);
-		} catch (ReservaJaExisteException e) {
-			throw new WebApplicationException(Status.CONFLICT);
+		} catch (Exception e) {
+			return Response.status(Status.CONFLICT).entity(e.getMessage()).build();
 		}
 		
 		this.entityManager.merge(reserva);
@@ -143,14 +144,19 @@ public class ReservaService {
 	 * @param reserva
 	 * @throws ReservaJaExisteException
 	 */
-	private void validaChoqueHorarios(Reserva reserva) throws ReservaJaExisteException {
+	private void validaChoqueHorarios(Reserva reserva) throws ReservaJaExisteException, IllegalArgumentException {
+		if (reserva.getDataHoraInicio().compareTo(reserva.getDataHoraFim()) > 0) {
+			throw new IllegalArgumentException("Datas inválidas: data inicial não pode ser maior do que data final");
+		}
+		
 		Long count = 0l;
 		
 		if (reserva.getId() != null) {
 			count = this.entityManager.createQuery(
-					"select	count(r) from Reserva r where local_id=:local_id and sala_id=:sala_id"
-					+ " and dataHoraInicio <= :dataHoraInicio and dataHoraFim >= :dataHoraFim"				
-					+ " or (id!=:id and (dataHoraInicio between :dataHoraInicio and :dataHoraFim"
+					"select	count(r) from Reserva r"
+					+ " where id!=:id and local_id=:local_id and sala_id=:sala_id"
+					+ " and (dataHoraInicio <= :dataHoraInicio and dataHoraFim >= :dataHoraFim"				
+					+ " or (dataHoraInicio between :dataHoraInicio and :dataHoraFim"
 					+ " or dataHoraFim between :dataHoraInicio and :dataHoraFim))",
 					Long.class)
 					.setParameter("id", reserva.getId())
@@ -161,10 +167,11 @@ public class ReservaService {
 					.getSingleResult();
 		} else {
 			count = this.entityManager.createQuery(
-					"select	count(r) from Reserva r where local_id=:local_id and sala_id=:sala_id"
-					+ " and dataHoraInicio <= :dataHoraInicio and dataHoraFim >= :dataHoraFim"				
+					"select	count(r) from Reserva r"
+					+ " where local_id=:local_id and sala_id=:sala_id"
+					+ " and (dataHoraInicio <= :dataHoraInicio and dataHoraFim >= :dataHoraFim"				
 					+ " or (dataHoraInicio between :dataHoraInicio and :dataHoraFim"
-					+ " or dataHoraFim between :dataHoraInicio and :dataHoraFim)",
+					+ " or dataHoraFim between :dataHoraInicio and :dataHoraFim))",
 					Long.class)
 					.setParameter("local_id", reserva.getLocal().getId())
 					.setParameter("sala_id", reserva.getSala().getId())
@@ -174,7 +181,7 @@ public class ReservaService {
 		}
 		
 		if (count > 0) {
-			throw new ReservaJaExisteException();
+			throw new ReservaJaExisteException("Sala já reservada neste horário");
 		}
 	}
 

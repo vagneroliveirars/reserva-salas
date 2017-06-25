@@ -35,7 +35,6 @@ public class CalendarDeserializer extends JsonDeserializer<Calendar> {
 				Date date = dateFormat.parse(dateAsString);
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTime(date);
-				calendar.setTimeZone(TimeZone.getTimeZone("GMT-3"));
 				return calendar;
 			} catch (ParseException e) {
 				throw new IOException(e);
