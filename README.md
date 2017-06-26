@@ -53,7 +53,7 @@ Busca a reserva por id.
 
 Caso o id não exista no sistema, retorna um 404 Not Found.
 
-## POST http://localhost:8080/reserva-salas/reservas
+### POST http://localhost:8080/reserva-salas/reservas
 
 Cadastra uma nova reserva
 
@@ -61,7 +61,7 @@ Sucesso: retorna um 201 Created
 
 Caso exista um choque de horários na mesma sala e local retorna um 409 Conflict com a mensagem de erro.
 
-## PUT http://localhost:8080/reserva-salas/reservas
+### PUT http://localhost:8080/reserva-salas/reservas
 
 Atualiza uma reserva
 
@@ -71,7 +71,7 @@ Caso o id não exista no sistema, retorna um 404 Not Found
 
 Caso exista um choque de horários na mesma sala e local retorna um 409 Conflict com a mensagem de erro.
 
-## DELETE http://localhost:8080/reserva-salas/reservas/:id
+### DELETE http://localhost:8080/reserva-salas/reservas/:id
 
 Deleta uma reserva
 
