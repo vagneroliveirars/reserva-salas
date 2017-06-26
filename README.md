@@ -6,7 +6,7 @@ API RESTful e aplicação Angular 2 para um sistema de reserva de salas
 
 * Apache Maven 3.3.9
 * Java 8
-* Node.js
+* Node.js (https://nodejs.org/en/download/package-manager/)
  
 ## Diretório da API RESTful em Java:
   * reserva-salas/reserva-salas-api
@@ -53,7 +53,7 @@ Lista todas as reservas
 
 Busca a reserva por id.
 
-Caso o id não exista no sistema, retorna um 404 Not Found.
+Caso o id não exista no sistema, retorna um 404 Not Found
 
 ### POST http://localhost:8080/reserva-salas/reservas
 
@@ -61,7 +61,7 @@ Cadastra uma nova reserva
 
 Sucesso: retorna um 201 Created
 
-Caso exista um choque de horários na mesma sala e local retorna um 409 Conflict com a mensagem de erro.
+Caso exista um choque de horários na mesma sala e local retorna um 409 Conflict com a mensagem de erro
 
 ### PUT http://localhost:8080/reserva-salas/reservas
 
@@ -71,7 +71,7 @@ Sucesso: retorna um 204 No Content
 
 Caso o id não exista no sistema, retorna um 404 Not Found
 
-Caso exista um choque de horários na mesma sala e local retorna um 409 Conflict com a mensagem de erro.
+Caso exista um choque de horários na mesma sala e local retorna um 409 Conflict com a mensagem de erro
 
 ### DELETE http://localhost:8080/reserva-salas/reservas/:id
 
@@ -80,3 +80,15 @@ Deleta uma reserva
 Sucesso: retorna um 204 No Content
 
 Caso o id não exista no sistema, retorna um 404 Not Found
+
+## Serviço REST para locais
+
+### GET http://localhost:8080/reserva-salas/locais/
+
+Lista todos os locais
+
+### GET http://localhost:8080/reserva-salas/locais/:id/salas
+
+Lista as salas por local
+
+Caso o local informado não possua salas cadastradas, retorna um 404 Not Found
