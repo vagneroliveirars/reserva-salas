@@ -61,7 +61,7 @@ Caso o id não exista no sistema, retorna um 404 Not Found
 
 Cadastra uma nova reserva
 
-Sucesso: retorna um 201 Created
+Sucesso: retorna um 201 Created com a localização do novo recurso
 
 Caso exista um choque de horários na mesma sala e local retorna um 409 Conflict com a mensagem de erro
 
