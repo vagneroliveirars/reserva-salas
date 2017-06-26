@@ -9,7 +9,9 @@ API RESTful e aplicação Angular 2 para um sistema de reserva de salas
 * Node.js (https://nodejs.org/en/download/package-manager/)
  
 ## Diretório da API RESTful em Java:
-  * reserva-salas/reserva-salas-api
+
+* reserva-salas/reserva-salas-api
+* Testes com JUnit disponíveis em src/test/java
 
 ## Diretório da aplicação Angular 2:
   * reserva-salas/reserva-salas-app
