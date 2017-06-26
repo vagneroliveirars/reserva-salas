@@ -1,3 +1,6 @@
+/**
+ * Modelo que representa uma sala
+ */
 export class Sala {
     
     constructor(

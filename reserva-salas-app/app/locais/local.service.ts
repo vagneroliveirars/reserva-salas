@@ -6,6 +6,9 @@ import 'rxjs/add/operator/toPromise';
 
 import { Local } from './local.model';
 
+/**
+ * Serviço de locais
+ */
 @Injectable()
 export class LocalService {
 
@@ -14,6 +17,9 @@ export class LocalService {
 
     constructor(private http: Http) {}
     
+    /**
+     * Busca todos os locais
+     */
     findAll(): Promise<Local[]> {        
         return this.http.get(this.locaisUrl)
             .toPromise()
@@ -21,6 +27,11 @@ export class LocalService {
             .catch(this.handleError);
     }
 
+    /**
+     * Busca as salas de um determinado local
+     * 
+     * @param idLocal 
+     */
     findSalasByLocalId(idLocal: number): Promise<Sala[]> {
         const url = `${this.locaisUrl}/${idLocal}/salas`;    // url/locais/:id/salas       
 
@@ -30,11 +41,21 @@ export class LocalService {
             .catch(this.handleError);      
     }
     
+    /**
+     * Manipula o erro retornado pelo serviço
+     * 
+     * @param error 
+     */
     private handleError(error: any): Promise<any> {
         console.log('Error: ', error);
         return Promise.reject(error.message || error);
     }
 
+    /**
+     * Extrai os dados retornados pelo serviço
+     * 
+     * @param response 
+     */
     private extractData(response: Response) {
           let body = response.json();
           return body || {};

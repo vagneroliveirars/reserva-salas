@@ -1,3 +1,6 @@
+/**
+ * Interface de serviços genérica
+ */
 export interface ServiceInterface<T> {
 
     findAll(): Promise<T[]>;

@@ -8,6 +8,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 
+/**
+ * Componente de detalhes de reserva
+ */
 @Component({
     moduleId: module.id,
     selector: 'reserva-detalhe',
@@ -30,6 +33,9 @@ export class ReservaDetalheComponent implements OnInit {
         private location: Location
     ) {}
     
+    /**
+     * Carrega os dados na inicialição
+     */
     ngOnInit(): void {
         this.reserva = new Reserva(null, 
             new Local(null, null), new Sala(null, null), null, null, '', false, null, '');
@@ -38,22 +44,26 @@ export class ReservaDetalheComponent implements OnInit {
 
         this.salas = [];
 
+        // Busca todos os locais
         this.localService.findAll()
             .then((locais: Local[]) => {
                 this.locais = locais;                
             });
       
-        // extrai o parâmetro da rota
+        // Extrai o parâmetro id da rota
         this.route.params.forEach((params: Params) => {
             let id: number = +params['id'];
 
             if (id) {
+                // Reserva existente
                 this.isNew = false;
 
+                // Busca a reserva pelo id
                 this.reservaService.find(id)
                 .then((reserva: Reserva) => {
                     this.reserva = reserva;
-                    if (this.reserva && this.reserva.local && this.reserva.local.id) {                        
+                    if (this.reserva && this.reserva.local && this.reserva.local.id) { 
+                        // Busca as salas do local da reserva                       
                         this.findSalasByLocalId(this.reserva.local.id);                        
                     }                                  
                 });             
@@ -62,6 +72,13 @@ export class ReservaDetalheComponent implements OnInit {
              
     }
 
+    /**
+     * Retorna uma classe CSS dinamicamente 
+     * conforme a validade do formulário
+     * 
+     * @param isValid 
+     * @param isPristine 
+     */
     getFormGroupClass(isValid: boolean, isPristine: boolean): {} {
         return {
             'form-group': true,
@@ -70,6 +87,13 @@ export class ReservaDetalheComponent implements OnInit {
         };
     }
 
+    /**
+     * Retorna uma classe CSS dinamicamente para o 
+     * componente conforme a validade do formulário
+     * 
+     * @param isValid 
+     * @param isPristine 
+     */
     getFormControlClass(isValid: boolean, isPristine: boolean): {} {
         return {
             'form-control': true,
@@ -78,25 +102,31 @@ export class ReservaDetalheComponent implements OnInit {
         };
     }
 
+    /**
+     * Submete os dados do formulário
+     */
     onSubmit(): void {
         let promise;        
         
         if (this.isNew) {
-            console.log('Cadastrar reserva');
+            // Cadastra uma nova reserva            
             promise = this.reservaService.create(this.reserva);
         } else {
-            console.log('Alterar reserva');
+            // Altera uma reserva
             promise = this.reservaService.update(this.reserva);
         }
 
         promise.then(() => {
+            // Volta a listagem de reservas
             this.goBack();
 
+            // Mostra mensagem de sucesso
             this.mostrarMensagem({
                 tipo: 'success',
                 texto: 'Reserva Salva!'
             });                                       
         }).catch(error => {
+            // Mostra mensagem de erro
             this.mostrarMensagem({
                 tipo: 'danger',
                 texto: error._body || error
@@ -104,10 +134,18 @@ export class ReservaDetalheComponent implements OnInit {
         });
     }
 
+    /**
+     * Volta a página anterior
+     */
     goBack(): void {
         this.location.back();
     }
 
+    /**
+     * Busca as salas de um determinado local pelo id
+     * 
+     * @param idLocal 
+     */
     findSalasByLocalId(idLocal: number) {        
         this.localService.findSalasByLocalId(idLocal)
         .then((salas: Sala[]) => {
@@ -115,9 +153,13 @@ export class ReservaDetalheComponent implements OnInit {
         });
     }
 
-    onChangeLocal(local) {
-        console.log(local);
-        
+    /**
+     * Ao alterar o local, limpa a sala da reserva e
+     * busca as salas do local selecionado
+     * 
+     * @param local 
+     */
+    onChangeLocal(local) {        
         if (local) {
             this.reserva.sala = new Sala(null, null);            
             this.findSalasByLocalId(local);

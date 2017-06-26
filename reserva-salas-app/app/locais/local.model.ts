@@ -1,4 +1,6 @@
-import { Sala } from './../salas/sala.model';
+/**
+ * Modelo que representa um local
+ */
 export class Local {
     
     constructor(

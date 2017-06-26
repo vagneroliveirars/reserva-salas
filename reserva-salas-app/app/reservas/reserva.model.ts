@@ -1,5 +1,9 @@
 import { Sala } from './../salas/sala.model';
 import { Local } from './../locais/local.model';
+
+/**
+ * Modelo que representa uma Reserva
+ */
 export class Reserva {
     
     constructor(

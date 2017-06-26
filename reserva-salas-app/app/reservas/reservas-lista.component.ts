@@ -4,6 +4,9 @@ import { Reserva } from './reserva.model';
 import { ReservaService } from './reserva.service';
 import { DialogService } from './../dialog.service';
 
+/**
+ * Componente de listagem de reservas
+ */
 @Component({
   moduleId: module.id,
   selector: 'reservas-lista',
@@ -21,7 +24,7 @@ export class ReservasListaComponent implements OnInit {
         private dialogService: DialogService) {}
     
     /**
-     * Carrega a lista de reservas
+     * Carrega a lista de reservas na inicialização
      */
     ngOnInit(): void {
         // Chama o serviço que retorna a lista de reservas

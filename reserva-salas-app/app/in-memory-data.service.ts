@@ -2,6 +2,10 @@ import { Reserva } from './reservas/reserva.model';
 import { InMemoryDbService} from 'angular-in-memory-web-api';
 import { Local } from "./locais/local.model";
 
+/**
+ * Serviço de dados em memória. 
+ * Utiliza uma API mockada para testes.
+ */
 export class InMemoryDataService implements InMemoryDbService {
 
     createDb(): {} {

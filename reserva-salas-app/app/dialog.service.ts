@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 
-
+/**
+ * Serviço de diálogo de confirmação
+ */
 @Injectable()
 export class DialogService {
 

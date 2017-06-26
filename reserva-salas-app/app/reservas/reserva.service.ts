@@ -8,6 +8,9 @@ import { Reserva } from './reserva.model';
 import { RESERVAS } from './reservas-mock';
 import { ServiceInterface } from './../interfaces/service.interface';
 
+/**
+ * Serviço de reservas
+ */
 @Injectable()
 export class ReservaService implements ServiceInterface<Reserva> {
 
@@ -16,6 +19,9 @@ export class ReservaService implements ServiceInterface<Reserva> {
 
     constructor(private http: Http) {}
 
+    /**
+     * Busca todas as reservas
+     */
     findAll(): Promise<Reserva[]> {
         /*
         / toPromise converte o Observable retornado pelo 
@@ -27,8 +33,13 @@ export class ReservaService implements ServiceInterface<Reserva> {
             .catch(this.handleError);
     }
 
+    /**
+     * Busca uma reserva pelo id
+     * 
+     * @param id 
+     */
     find(id: number): Promise<Reserva> {
-        const url = `${this.reservasUrl}/${id}`;    // url/reservas/:id
+        const url = `${this.reservasUrl}/${id}`;    // api/reservas/:id
 
         return this.http.get(url)
             .toPromise()
@@ -36,6 +47,11 @@ export class ReservaService implements ServiceInterface<Reserva> {
             .catch(this.handleError);      
     }
 
+    /**
+     * Cria uma reserva
+     * 
+     * @param reserva 
+     */
     create(reserva: Reserva): Promise<Reserva> {
         return this.http
             .post(this.reservasUrl, JSON.stringify(reserva), {headers: this.headers})
@@ -44,6 +60,11 @@ export class ReservaService implements ServiceInterface<Reserva> {
             .catch(this.handleError);
     }
 
+    /**
+     * Atualiza uma reserva
+     * 
+     * @param reserva 
+     */
     update(reserva: Reserva): Promise<Reserva> {    
         return this.http
             .put(this.reservasUrl, JSON.stringify(reserva), {headers: this.headers})
@@ -52,9 +73,13 @@ export class ReservaService implements ServiceInterface<Reserva> {
             .catch(this.handleError);
     } 
 
+    /**
+     * Deleta uma reserva
+     * 
+     * @param reserva 
+     */
     delete(reserva: Reserva): Promise<Reserva> {
-         // utiliza nova anotação do ECMAScript 6
-        const url = `${this.reservasUrl}/${reserva.id}`;    // app/reservas/:id
+        const url = `${this.reservasUrl}/${reserva.id}`;    // appi/reservas/:id
 
         return this.http
             .delete(url, {headers: this.headers})
@@ -63,17 +88,21 @@ export class ReservaService implements ServiceInterface<Reserva> {
             .catch(this.handleError);
     }        
 
-    search(termo: string): Observable<Reserva[]> {
-        return this.http
-            .get(`${this.reservasUrl}/?nome=${termo}`)
-            .map((res: Response) => res.json().data as Reserva[]); // Converte o Response retornado em um json como array de reservas
-    }
-
+    /**
+     * Extrai os dados retornados pelo serviço
+     * 
+     * @param response 
+     */
     private extractData(response: Response) {
           let body = response.json();           
           return body || {};
     }
 
+    /**
+     * Manipula o erro retornado pelo serviço
+     * 
+     * @param error 
+     */
     private handleError(error: any): Promise<any> {
         console.log('Error: ', error);
         return Promise.reject(error.message || error);
