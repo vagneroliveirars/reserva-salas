@@ -1,4 +1,4 @@
-package br.com.banana.config;
+package br.com.banana.filter;
 
 import java.io.IOException;
 
