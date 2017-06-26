@@ -33,7 +33,9 @@ API RESTful e aplicação Angular 2 para um sistema de reserva de salas
 
 * O plugin wildfly do Maven roda o application server (WildFly embarcado) e faz deploy da aplicação
 * O download do WildFly será feito automaticamente pelo Maven
-* A aplicação utiliza o banco de dados h2 em modo embarcado e em memória. As tabelas são geradas automaticamente pelo Hibernate. Dados de locais e salas são previamente importados na criação das tabelas.
+* A aplicação utiliza o banco de dados h2 em modo embarcado e em memória. 
+* As tabelas são geradas automaticamente pelo Hibernate. 
+* Dados de locais e salas são previamente importados na criação das tabelas.
 
 # Endpoints
 
